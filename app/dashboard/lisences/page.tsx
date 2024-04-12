@@ -18,6 +18,7 @@ import {
 import { AddLisence } from './addLisences'
 import { EditLisence } from './editLisence'
 import { DeleteButton } from '@/components/buttons/delete-button'
+import toRupiah from '@/lib/toRupiah'
 
 const Lisences = (): React.JSX.Element => {
   const [lisences, setLisences] = useState<Lisence[]>([])
@@ -58,7 +59,7 @@ const Lisences = (): React.JSX.Element => {
             <TableRow key={lisence.id}>
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{lisence.name}</TableCell>
-              <TableCell>{lisence.price}</TableCell>
+              <TableCell>{toRupiah(lisence.price)}</TableCell>
               <TableCell className='text-right'>
                 <EditLisence fetchData={fetchData} id={lisence.id} />
                 <DeleteButton onClick={() => deleteLisence(lisence.id)} />

@@ -2,9 +2,9 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
+import ReduxProvider from '@/features/reduxProvider'
 import { ThemeProvider } from '@/components/theme-provider'
 import NavigationBar from '@/components/navbar'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -26,8 +26,10 @@ export default function RootLayout ({
           enableSystem
           disableTransitionOnChange
         >
-          <NavigationBar />
-          {children}
+          <ReduxProvider>
+            <div className='flex justify-center items-center w-screen'><NavigationBar /></div>
+            {children}
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

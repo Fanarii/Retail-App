@@ -5,11 +5,16 @@ const prisma = db
 
 // get lisence by id
 export const GET = async (req: Request, { params }: { params: { id: string } }): Promise<NextResponse> => {
-  const response = await prisma.lisence.findUnique({
-    where: { id: Number(params.id) }
-  })
+  try {
+    const response = await prisma.lisence.findUnique({
+      where: { id: Number(params.id) }
+    })
 
-  return NextResponse.json(response)
+    return NextResponse.json(response)
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ msg: error }, { status: 500 })
+  }
 }
 
 // update lisence
