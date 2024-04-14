@@ -36,17 +36,17 @@ const NavigationBar = (): React.JSX.Element => {
           </Link>
           <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/' ? '' : 'hidden'}`}></div>
         </li>
-        <li className={`py-3 flex flex-col items-center justify-center ${isActive === '/dashboard/lisences' ? 'opacity-100' : 'opacity-50'}`}>
-          <Link className='px-4 py-2' href='/dashboard/lisences'>
-            Lisence
-          </Link>
-          <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/dashboard/lisences' ? '' : 'hidden'}`}></div>
-        </li>
         <li className={`py-3 flex flex-col items-center justify-center ${isActive === '/dashboard/products' ? 'opacity-100' : 'opacity-50'}`}>
           <Link className='px-4 py-2' href='/dashboard/products'>
             Products
           </Link>
           <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/dashboard/products' ? '' : 'hidden'}`}></div>
+        </li>
+        <li className={`py-3 flex flex-col items-center justify-center ${isActive === '/dashboard/history' ? 'opacity-100' : 'opacity-50'}`}>
+          <Link className='px-4 py-2' href='/dashboard/history'>
+            History
+          </Link>
+          <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/dashboard/history' ? '' : 'hidden'}`}></div>
         </li>
       </ul>
     </nav>

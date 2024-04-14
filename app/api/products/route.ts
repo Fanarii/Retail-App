@@ -5,11 +5,7 @@ const prisma = db
 
 // get all product
 export const GET = async (): Promise<NextResponse> => {
-  const response = await prisma.product.findMany({
-    include: {
-      lisence: true
-    }
-  })
+  const response = await prisma.product.findMany()
   return NextResponse.json(response)
 }
 
@@ -22,10 +18,7 @@ export const POST = async (req: Request): Promise<NextResponse> => {
         name: body.name,
         price: body.price,
         marketPrice: body.marketPrice,
-        quantity: body.quantity,
-        lisence: {
-          connect: { id: Number(body.lisenceId) }
-        }
+        quantity: body.quantity
       }
     })
 

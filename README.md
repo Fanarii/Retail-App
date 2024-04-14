@@ -34,3 +34,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+ const getTotalAmount = (): number => {
+    return items.reduce((total, item) => total + item.marketPrice * item.quantity, 0)
+  }
+
+  const removeItem = (itemName: string): void => {
+    const updatedItems = items.map((item) =>
+      item.name === itemName && item.quantity >= 1 ? { ...item, quantity: item.quantity - 1 } : item
+    ).filter((item) => item.quantity > 0)
+    setItems(updatedItems)
+  }
+
+  const handleCharge = (): void => {
+    alert(`Total Amount: ${toRupiah(getTotalAmount())}`)
+    setItems([])
+  }

@@ -43,7 +43,6 @@ const Products = (): React.JSX.Element => {
                     <TableRow>
                         <TableHead className="w-[100px]">No</TableHead>
                         <TableHead>Name</TableHead>
-                        <TableHead>Lisence</TableHead>
                         <TableHead>Price</TableHead>
                         <TableHead>Market Price</TableHead>
                         <TableHead>Qty.</TableHead>
@@ -55,7 +54,6 @@ const Products = (): React.JSX.Element => {
                         <TableRow key={product.id}>
                             <TableCell className="font-medium">{index + 1}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.lisence.name}</TableCell>
                             <TableCell>{toRupiah(product.price)}</TableCell>
                             <TableCell>{toRupiah(product.marketPrice ?? 0)}</TableCell>
                             <TableCell>{product.quantity}</TableCell>
