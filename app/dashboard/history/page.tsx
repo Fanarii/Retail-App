@@ -2,8 +2,9 @@
 
 import { fetchHistory } from '@/features/historySlice'
 import { type RootState } from '@/features/store'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useReactToPrint } from 'react-to-print'
 import {
   Table,
   TableBody,
@@ -22,6 +23,8 @@ import {
 } from '@/components/ui/popover'
 
 import toRupiah from '@/lib/toRupiah'
+import { Button } from '@/components/ui/button'
+import ComponentToPrint from './ComponentToPrint'
 
 const History = (): React.JSX.Element => {
   const dispatch = useDispatch()
@@ -33,6 +36,11 @@ const History = (): React.JSX.Element => {
 
   const totalAmount = historyData.reduce((acc, curr) => acc + curr.totalAmount, 0)
 
+  const componentRef = useRef<HTMLDivElement>(null)
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current ?? null
+  })
+
   return (
     <Table>
       <TableCaption>A list of your recent historys.</TableCaption>
@@ -42,7 +50,8 @@ const History = (): React.JSX.Element => {
           <TableHead>Payment</TableHead>
           <TableHead>Items</TableHead>
           <TableHead>Change</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -77,13 +86,17 @@ const History = (): React.JSX.Element => {
               </Popover>
             </TableCell>
             <TableCell>{toRupiah(history.change)}</TableCell>
-            <TableCell className="text-right">{toRupiah(history.totalAmount)}</TableCell>
+            <TableCell>{toRupiah(history.totalAmount)}</TableCell>
+            <TableCell className="text-right"><Button onClick={() => { handlePrint(history) } }>Print</Button></TableCell>
+            <div className='hidden'>
+              <ComponentToPrint props={history} ref={componentRef} />
+            </div>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={4}>Total</TableCell>
+          <TableCell colSpan={5}>Total</TableCell>
           <TableCell className="text-right">{toRupiah(totalAmount)}</TableCell>
         </TableRow>
       </TableFooter>
