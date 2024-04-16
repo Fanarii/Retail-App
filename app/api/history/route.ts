@@ -47,7 +47,7 @@ export const POST = async (req: Request, { params }: { params: { id: number } })
 }
 
 // get all history
-export const GET = async (): Promise<NextResponse> => {
+export const GET = async (req: Request, { params }: { params: { id: number } }): Promise<NextResponse> => {
   try {
     const response = await prisma.history.findMany({
       include: { items: true }

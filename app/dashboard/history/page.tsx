@@ -76,11 +76,6 @@ const History = (): React.JSX.Element => {
           <TableHead>Change</TableHead>
           <TableHead>Amount</TableHead>
           <TableHead className="text-right">Action</TableHead>
-          <div className='hidden'>
-            {printData && (
-              <ComponentToPrint props={printData} ref={componentRef} />
-            )}
-          </div>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -129,6 +124,11 @@ const History = (): React.JSX.Element => {
         <TableRow>
           <TableCell colSpan={5}>Total</TableCell>
           <TableCell className="text-right">{toRupiah(totalAmount)}</TableCell>
+          <TableCell className="text-right"><div className='hidden'>
+            {printData && (
+              <ComponentToPrint props={printData} ref={componentRef} />
+            )}
+          </div></TableCell>
         </TableRow>
       </TableFooter>
     </Table>
