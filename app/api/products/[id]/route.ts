@@ -44,7 +44,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
     const response = await prisma.product.delete({
       where: { id: Number(params.id) }
     })
-    return NextResponse.json(response, { status: 200 })
+    return NextResponse.json(response)
   } catch (error) {
     return NextResponse.json({ msg: error }, { status: 500 })
   }
