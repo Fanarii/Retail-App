@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import db from '../../../../lib/db'
 
 const prisma = db
@@ -39,7 +39,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 }
 
 // delete product
-export const DELETE = async (req: Response, { params }: { params: { id: string } }): Promise<NextResponse> => {
+export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> => {
   try {
     const response = await prisma.product.delete({
       where: { id: Number(params.id) }
