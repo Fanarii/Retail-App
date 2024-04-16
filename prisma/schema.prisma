@@ -18,7 +18,6 @@ model User {
   name     String @unique
   password String
   money    Int    @default(2000)
-  role     Role   @default(BASIC)
 }
 
 model History {
@@ -31,10 +30,11 @@ model History {
 }
 
 model HistoryProduct {
-  id       Int    @id @default(autoincrement())
-  name     String
-  quantity Int
-  price    Int
+  id        Int      @id @default(autoincrement())
+  name      String
+  quantity  Int
+  price     Int
+  createdAt DateTime @default(now())
 
   History   History? @relation(fields: [historyId], references: [id])
   historyId Int?
@@ -46,9 +46,5 @@ model Product {
   price       Int
   marketPrice Int
   quantity    Int    @default(0)
-}
-
-enum Role {
-  BASIC
-  ADMIN
+  stock       Int    @default(0)
 }

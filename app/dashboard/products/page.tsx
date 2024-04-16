@@ -14,9 +14,9 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-// import { AddProduct } from './addProduct'
+import { AddProduct } from './addProduct'
 import { DeleteButton } from '@/components/buttons/delete-button'
-// import { EditProduct } from './editProduct'
+import { EditProduct } from './editProduct'
 import toRupiah from '@/lib/toRupiah'
 import { useDispatch, useSelector } from 'react-redux'
 import { type RootState } from '@/features/store'
@@ -32,11 +32,12 @@ const Products = (): React.JSX.Element => {
 
   const deleteProduct = async (id: number): Promise<void> => {
     await axios.delete(`/api/products/${id}`)
+    dispatch(fetchProducts() as any)
   }
 
   return (
         <div className='m-4'>
-            {/* <AddProduct /> */}
+            <AddProduct fetchData={dispatch(fetchProducts() as any)} />
             <Table>
                 <TableCaption>A list of your products.</TableCaption>
                 <TableHeader>
@@ -46,6 +47,7 @@ const Products = (): React.JSX.Element => {
                         <TableHead>Price</TableHead>
                         <TableHead>Market Price</TableHead>
                         <TableHead>Qty.</TableHead>
+                        <TableHead>Stock</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -57,9 +59,10 @@ const Products = (): React.JSX.Element => {
                             <TableCell>{toRupiah(product.price)}</TableCell>
                             <TableCell>{toRupiah(product.marketPrice ?? 0)}</TableCell>
                             <TableCell>{product.quantity}</TableCell>
+                            <TableCell>{product.stock}</TableCell>
                             <TableCell className='text-right'>
                               <DeleteButton onClick={() => deleteProduct(product.id)} />
-                              {/* <EditProduct fetchData={fetchData} id={product.id}/> */}
+                              <EditProduct id={product.id}/>
                             </TableCell>
                         </TableRow>
                     ))}

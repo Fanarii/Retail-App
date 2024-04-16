@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 'use client'
+/* eslint-disable @typescript-eslint/promise-function-async */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 
 import { fetchHistory } from '@/features/historySlice'
 import { type RootState } from '@/features/store'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useReactToPrint } from 'react-to-print'
 import {
@@ -25,21 +28,42 @@ import {
 import toRupiah from '@/lib/toRupiah'
 import { Button } from '@/components/ui/button'
 import ComponentToPrint from './ComponentToPrint'
+import { DeleteButton } from '@/components/buttons/delete-button'
+import axios from 'axios'
+import { type HistoryInterface } from '@/interfaces'
 
 const History = (): React.JSX.Element => {
   const dispatch = useDispatch()
-  const { history: historyData } = useSelector((state: RootState) => state.history)
+  const history = useSelector((state: RootState) => state.history.history)
+  const [printData, setPrintData] = useState<HistoryInterface>(history[1])
 
   useEffect(() => {
     dispatch(fetchHistory() as any)
-  }, [dispatch])
+  }, [])
 
-  const totalAmount = historyData.reduce((acc, curr) => acc + curr.totalAmount, 0)
+  const totalAmount = history.reduce((acc, curr) => acc + curr.totalAmount, 0)
 
   const componentRef = useRef<HTMLDivElement>(null)
+
+  const handleClickPrint = async (id: number): Promise<void> => {
+    try {
+      const response = await axios.get(`/api/history/${id}`)
+      const data: HistoryInterface = response.data
+      handlePrint()
+      setPrintData(data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current ?? null
   })
+
+  const handleDelete = async (id: number): Promise<void> => {
+    await axios.delete(`/api/history/${id}`)
+    dispatch(fetchHistory() as any)
+  }
 
   return (
     <Table>
@@ -52,10 +76,15 @@ const History = (): React.JSX.Element => {
           <TableHead>Change</TableHead>
           <TableHead>Amount</TableHead>
           <TableHead className="text-right">Action</TableHead>
+          <div className='hidden'>
+            {printData && (
+              <ComponentToPrint props={printData} ref={componentRef} />
+            )}
+          </div>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {historyData.map((history, index) => (
+        {history.map((history, index) => (
           <TableRow key={history.id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{toRupiah(history.pay)}</TableCell>
@@ -87,10 +116,12 @@ const History = (): React.JSX.Element => {
             </TableCell>
             <TableCell>{toRupiah(history.change)}</TableCell>
             <TableCell>{toRupiah(history.totalAmount)}</TableCell>
-            <TableCell className="text-right"><Button onClick={() => { handlePrint(history) } }>Print</Button></TableCell>
-            <div className='hidden'>
-              <ComponentToPrint props={history} ref={componentRef} />
-            </div>
+            <TableCell className="text-right">
+              <Button onClick={() => handleClickPrint(history.id) }>
+                Print
+              </Button>
+              <DeleteButton onClick={() => handleDelete(history.id)} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

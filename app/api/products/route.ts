@@ -18,7 +18,8 @@ export const POST = async (req: Request): Promise<NextResponse> => {
         name: body.name,
         price: body.price,
         marketPrice: body.marketPrice,
-        quantity: body.quantity
+        quantity: body.quantity,
+        stock: body.stock
       }
     })
 

@@ -6,28 +6,33 @@ import axios from 'axios'
 import DialogForm from '@/components/dialog/dialog-form'
 import DialogField from '@/components/dialog/dialog-field'
 import DialogSubmit from '@/components/dialog/dialog-submit'
+import { useDispatch, useSelector } from 'react-redux'
+import { type RootState } from '@/features/store'
 
 interface addProductProps {
-  fetchData: () => Promise<void>
   id: number
 }
 
-export function EditProduct ({ fetchData, id }: addProductProps): React.JSX.Element {
+export function EditProduct ({ id }: addProductProps): React.JSX.Element {
   const [name, setName] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
   const [quantity, setQuantity] = useState<number>(0)
   const [marketPrice, setMarketPrice] = useState<number>(0)
+  const [stock, setStock] = useState<number>(0)
 
-  const initLisence = async (): Promise<void> => {
-    const response = await axios.get(`/api/products/${id}`)
-    const dataName: string = response.data.name
-    const dataPrice: number = response.data.price
-    const dataMarketPrice: number = response.data.marketPrice
-    const dataQuantity: number = response.data.quantity
-    setName(dataName)
-    setPrice(dataPrice)
-    setMarketPrice(dataMarketPrice)
-    setQuantity(dataQuantity)
+  const dispatch = useDispatch()
+  const products = useSelector((state: RootState) => state.products.products)
+
+  const initialData = (): void => {
+    const response = products.find((product => product.id === id))
+    if (response != null) {
+      const { name, price, marketPrice, quantity, stock } = response
+      setName(name)
+      setPrice(price)
+      setMarketPrice(marketPrice ?? 0)
+      setQuantity(quantity)
+      setStock(stock)
+    }
   }
 
   const handlePriceChange = (value: string): void => {
@@ -42,16 +47,19 @@ export function EditProduct ({ fetchData, id }: addProductProps): React.JSX.Elem
     setMarketPrice(Number(value))
   }
 
+  const handleStockChange = (value: string): void => {
+    setStock(Number(value))
+  }
+
   const postData = async (): Promise<void> => {
     try {
       await axios.patch(`/api/products/${id}`, {
         name,
         price,
         marketPrice,
-        quantity
+        quantity,
+        stock
       })
-
-      await fetchData()
     } catch (error) {
       console.error('Failed to add product:', error)
       throw error
@@ -59,8 +67,8 @@ export function EditProduct ({ fetchData, id }: addProductProps): React.JSX.Elem
   }
 
   useEffect(() => {
-    void initLisence()
-  }, [])
+    initialData()
+  }, [dispatch])
 
   return (
     <DialogForm
@@ -73,6 +81,7 @@ export function EditProduct ({ fetchData, id }: addProductProps): React.JSX.Elem
       <DialogField label='price' placeholder='66000' onChange={handlePriceChange} isNumber={true} defaultValue={price} />
       <DialogField label='marketPrice' placeholder='2400' onChange={handleMarketPriceChange} isNumber={true} defaultValue={marketPrice} />
       <DialogField label='quantity' placeholder='1' onChange={handleQuantityChange} isNumber={true} defaultValue={quantity} />
+      <DialogField label='stock' placeholder='1' onChange={handleStockChange} isNumber={true} defaultValue={stock} />
       <DialogSubmit text='Save' onClick={postData} />
     </DialogForm>
   )

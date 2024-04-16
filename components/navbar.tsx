@@ -16,7 +16,7 @@ const NavigationBar = (): React.JSX.Element => {
   }, [location])
 
   return (
-    <nav className='bg-primary min-w-[100%] md:flex md:justify-center items-center w-full'>
+    <nav className='bg-primary min-w-[100%] md:flex md:justify-center items-center w-full sticky'>
       <button
         className='text-4xl text-third p-2 md:hidden'
         onClick={() => { setIsOpen(!isOpen) }}
@@ -25,7 +25,7 @@ const NavigationBar = (): React.JSX.Element => {
       </button>
       <ModeToggle />
       <ul
-        className={`text-white text-1xl flex flex-col items-center 
+        className={`dark:text-white text-1xl flex flex-col items-center 
           md:justify-center md:flex md:items-center gap-1 md:flex-row md:space-x-4 ${
           isOpen ? 'block md:hidden' : 'hidden md:block'
         }`}
@@ -47,6 +47,12 @@ const NavigationBar = (): React.JSX.Element => {
             History
           </Link>
           <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/dashboard/history' ? '' : 'hidden'}`}></div>
+        </li>
+        <li className={`py-3 flex flex-col items-center justify-center ${isActive === '/dashboard/stock' ? 'opacity-100' : 'opacity-50'}`}>
+          <Link className='px-4 py-2' href='/dashboard/stock'>
+            Stock
+          </Link>
+          <div className={`rounded-lg bg-white w-7 h-1 ${isActive === '/dashboard/stock' ? '' : 'hidden'}`}></div>
         </li>
       </ul>
     </nav>

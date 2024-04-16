@@ -5,11 +5,7 @@ export interface ProductInterface {
   marketPrice: number | null
   lisenceId: number | null
   quantity: number
-  lisence: {
-    id: number
-    name: string
-    price: number
-  }
+  stock: number
 }
 
 export interface HistoryInterface {

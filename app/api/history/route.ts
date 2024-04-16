@@ -7,6 +7,17 @@ const prisma = db
 export const POST = async (req: Request, { params }: { params: { id: number } }): Promise<NextResponse> => {
   const body = await req.json()
   try {
+    for (const item of body.items) {
+      const product = await prisma.product.findUnique({ where: { name: item.name } })
+      if (product == null) {
+        return NextResponse.json({ msg: `Product '${item.name}' not found.` }, { status: 404 })
+      }
+
+      if (product.stock < item.quantity) {
+        return NextResponse.json({ msg: `Insufficient stock for product '${item.name}'.` }, { status: 400 })
+      }
+    }
+
     const history = await prisma.history.create({
       data: {
         pay: body.pay,
@@ -21,6 +32,13 @@ export const POST = async (req: Request, { params }: { params: { id: number } })
         }
       }
     })
+
+    for (const item of body.items) {
+      await prisma.product.update({
+        where: { name: item.name },
+        data: { stock: { decrement: item.quantity } }
+      })
+    }
 
     return NextResponse.json(history)
   } catch (error) {

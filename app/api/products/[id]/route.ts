@@ -27,7 +27,8 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       data: {
         name: body.name,
         price: body.price,
-        quantity: body.quantity
+        quantity: body.quantity,
+        stock: body.stock
       }
     })
 
@@ -37,6 +38,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
   }
 }
 
+// delete product
 export const DELETE = async (req: Response, { params }: { params: { id: string } }): Promise<NextResponse> => {
   try {
     const response = await prisma.product.delete({

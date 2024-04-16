@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable react/prop-types */
 import React, { type ForwardedRef } from 'react'
 import { type HistoryInterface } from '@/interfaces'
@@ -18,12 +19,14 @@ const ComponentToPrint = React.forwardRef<HTMLDivElement, ComponentProps>(
         <div className="border-b border-gray-300 mb-4"></div>
         <div className="mb-4">
           <h2 className="text-sm text-gray-500">Items</h2>
-          {props.items.map((item) => (
+          {props.items && props.items.length > 0
+            ? props.items.map((item) => (
             <div key={item.id} className="flex justify-between py-1 gap-2">
               <p>{item.name}</p>
               <p>x{item.quantity} {toRupiah(item.price * item.quantity)}</p>
             </div>
-          ))}
+            ))
+            : ''}
         </div>
         <div className="mb-4">
           <div className="flex justify-between py-1">
